@@ -1,0 +1,25 @@
+Algorithme EQUATION_DIOPHANTIENNE
+Variables
+    a, b, c, d, x0, y0, xp, yp : entier
+
+Début
+    Écrire("Entrez les valeurs de a, b et c : ")
+    Lire(a, b, c)  
+
+    Écrire("PGCD(", a, ", ", b, ") = ", d)
+
+    Si (c mod d <> 0) alors
+        Écrire("Pas de solution entière car ", d, " ne divise pas ", c)
+    Sinon
+
+        xp ← x0 * (c div d)
+        yp ← y0 * (c div d)
+
+        Écrire("Une solution particulière est : (", xp, ", ", yp, ")")
+
+        Écrire("La solution générale est :")
+        Écrire("x = ", xp, " + k * (", b div d, ")")
+        Écrire("y = ", yp, " - k * (", a div d, ")")
+        Écrire("où k est un entier relatif.")
+    FinSi
+Fin
