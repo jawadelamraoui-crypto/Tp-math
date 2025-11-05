@@ -1,0 +1,55 @@
+#include <stdio.h>
+
+// Fonction PGCD simple
+int pgcd(int a, int b) {
+    int r;
+    while (b != 0) {
+        r = a % b;
+        a = b;
+        b = r;
+    }
+    return a;
+}
+
+// Algorithme d’Euclide étendu
+void euclide_etendu(int a, int b, int *d, int *x, int *y) {
+    if (b == 0) {
+        *d = a;
+        *x = 1;
+        *y = 0;
+    } else {
+        int x1, y1;
+        euclide_etendu(b, a % b, d, &x1, &y1);
+        *x = y1;
+        *y = x1 - (a / b) * y1;
+    }
+}
+
+int main(void) {
+    int a, b, c;
+    int d, x0, y0;
+
+    printf("Entrez a, b et c pour l'équation ax + by = c : ");
+    scanf("%d %d %d", &a, &b, &c);
+
+    euclide_etendu(a, b, &d, &x0, &y0);
+
+    printf("PGCD(%d, %d) = %d\n", a, b, d);
+
+    if (c % d != 0) {
+        printf("Pas de solution entière car %d ne divise pas %d.\n", d, c);
+        return 0;
+    }
+
+    // Solution particulière
+    int xp = x0 * (c / d);
+    int yp = y0 * (c / d);
+
+    printf("Une solution particulière est : (x, y) = (%d, %d)\n", xp, yp);
+    printf("La solution générale est :\n");
+    printf("x = %d + k*(%d)\n", xp, b / d);
+    printf("y = %d - k*(%d)\n", yp, a / d);
+    printf("où k est un entier relatif.\n");
+
+    return 0;
+}
