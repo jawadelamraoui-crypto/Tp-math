@@ -1,55 +1,47 @@
-#include <stdio.h>
-
-// Fonction PGCD simple
-int pgcd(int a, int b) {
-    int r;
-    while (b != 0) {
-        r = a % b;
-        a = b;
-        b = r;
-    }
-    return a;
-}
-
-// Algorithme d’Euclide étendu
-void euclide_etendu(int a, int b, int *d, int *x, int *y) {
-    if (b == 0) {
-        *d = a;
-        *x = 1;
-        *y = 0;
-    } else {
-        int x1, y1;
-        euclide_etendu(b, a % b, d, &x1, &y1);
-        *x = y1;
-        *y = x1 - (a / b) * y1;
-    }
-}
+include <stdio.h>
 
 int main(void) {
-    int a, b, c;
-    int d, x0, y0;
+    int A, B;
+    printf("Entrez la valeur du dividende A : ");
+    scanf("%d", &A);
 
-    printf("Entrez a, b et c pour l'équation ax + by = c : ");
-    scanf("%d %d %d", &a, &b, &c);
+    printf("Entrez la valeur du diviseur B : ");
+    scanf("%d", &B);
 
-    euclide_etendu(a, b, &d, &x0, &y0);
+    int a = A, b = B;
 
-    printf("PGCD(%d, %d) = %d\n", a, b, d);
+    // Variables pour l'algorithme étendu d'Euclide
+    int x0 = 1, y0 = 0; // Coefficients pour A
+    int x1 = 0, y1 = 1; // Coefficients pour B
+    int r, q;
 
-    if (c % d != 0) {
-        printf("Pas de solution entière car %d ne divise pas %d.\n", d, c);
-        return 0;
+    printf("\n--- Étapes de l'algorithme de Bézout ---\n");
+
+    while (B != 0) {
+        q = A / B;
+        r = A % B;
+        printf("%d = %d × %d + %d\n", A, B, q, r);
+
+        // Calcul des nouveaux coefficients de Bézout
+        int x2 = x0 - q * x1;
+        int y2 = y0 - q * y1;
+
+        // Affichage de l'équation de Bézout correspondante
+        printf("Étape : %d*%d + %d*%d = %d\n\n", a, x2, b, y2, A);
+
+        // Mise à jour pour la prochaine étape
+        x0 = x1;
+        y0 = y1;
+        x1 = x2;
+        y1 = y2;
+
+        A = B;
+        B = r;
     }
 
-    // Solution particulière
-    int xp = x0 * (c / d);
-    int yp = y0 * (c / d);
-
-    printf("Une solution particulière est : (x, y) = (%d, %d)\n", xp, yp);
-    printf("La solution générale est :\n");
-    printf("x = %d + k*(%d)\n", xp, b / d);
-    printf("y = %d - k*(%d)\n", yp, a / d);
-    printf("où k est un entier relatif.\n");
+    printf("Le PGCD est : %d\n", A);
+    printf("Coefficients finaux de Bézout : x = %d, y = %d\n", x0, y0);
+    printf("Vérification : %d*%d + %d*%d = %d\n", a, x0, b, y0, a*x0 + b*y0);
 
     return 0;
 }
